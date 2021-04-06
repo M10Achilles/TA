@@ -1,0 +1,7 @@
+https://492a43ebf5a8.ngrok.io
+
+python manage.py runserver
+
+break key: fn + r
+
+line¤u§@ºô§}: https://manager.line.biz/account/@838rtxpq/setting/response
