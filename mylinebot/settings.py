@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-g37yc2hu=-8t-tfgb4p%w61n9n+j+4t23=d)rtew($ch7b_33$
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '492a43ebf5a8.ngrok.io'
+    '0dd9d30c875f.ngrok.io'
 ]
 
 

@@ -7,7 +7,7 @@ from django.conf import settings
  
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextSendMessage
+from linebot.models import *
  
 #models.py資料表
 from test01linebot.models import *
@@ -19,9 +19,11 @@ parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 def callback(request):
  
     if request.method == 'POST':
+
+        message=[]
         signature = request.META['HTTP_X_LINE_SIGNATURE']
         body = request.body.decode('utf-8')
- 
+        message.append(TextSendMessage(text=str(body)))
         try:
             events = parser.parse(body, signature)  # 傳入的事件
         except InvalidSignatureError:
@@ -30,37 +32,36 @@ def callback(request):
             return HttpResponseBadRequest()
  
         for event in events:
-            # if isinstance(event, MessageEvent):  # 如果有訊息事件
-            #     line_bot_api.reply_message(  # 回復傳入的訊息文字
-            #         event.reply_token,
-            #         TextSendMessage(text=event.message.text)
-            #     )
+            
             if isinstance(event, MessageEvent):
-                mtext=event.message.text
-                message=[]
-                if mtext== '建立會員資料':
-                                    
-                    uid=event.source.user_id
-                    profile=line_bot_api.get_profile(uid)
-                    name=profile.display_name
-                    pic_url=profile.picture_url
-
-                    
-                    if User_Info.objects.filter(uid=uid).exists()==False:
-                        User_Info.objects.create(uid=uid,name=name,pic_url=pic_url,mtext=mtext)
-                        message.append(TextSendMessage(text='會員資料新增完畢'))
-                    elif User_Info.objects.filter(uid=uid).exists()==True:
-                        message.append(TextSendMessage(text='已經有建立會員資料囉'))
-                        user_info = User_Info.objects.filter(uid=uid)
-                        for user in user_info:
-                            info = 'UID=%s\nNAME=%s\n大頭貼=%s'%(user.uid,user.name,user.pic_url)
-                            message.append(TextSendMessage(text=info))
+                if event.message.type=='text':
+                    message.append(TextSendMessage(text='文字訊息'))
                     line_bot_api.reply_message(event.reply_token,message)
-                else:
-                    line_bot_api.reply_message(  # 回復傳入的訊息文字
-                        event.reply_token,
-                        TextSendMessage(text=event.message.text)
-                    )
+
+                elif event.message.type=='image':
+                    message.append(TextSendMessage(text='圖片訊息'))
+                    line_bot_api.reply_message(event.reply_token,message)
+
+                elif event.message.type=='location':
+                    message.append(TextSendMessage(text='位置訊息'))
+                    line_bot_api.reply_message(event.reply_token,message)
+
+                elif event.message.type=='video':
+                    message.append(TextSendMessage(text='影片訊息'))
+                    line_bot_api.reply_message(event.reply_token,message)
+
+
+                elif event.message.type=='sticker':
+                    message.append(TextSendMessage(text='貼圖訊息'))
+                    line_bot_api.reply_message(event.reply_token,message)
+
+                elif event.message.type=='audio':
+                    message.append(TextSendMessage(text='聲音訊息'))
+                    line_bot_api.reply_message(event.reply_token,message)
+
+                elif event.message.type=='file':
+                    message.append(TextSendMessage(text='檔案訊息'))
+                    line_bot_api.reply_message(event.reply_token,message)
                 
         return HttpResponse()
     else:

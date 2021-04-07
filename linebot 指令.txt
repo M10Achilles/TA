@@ -5,3 +5,5 @@ python manage.py runserver
 break key: fn + r
 
 line¤u§@ºô§}: https://manager.line.biz/account/@838rtxpq/setting/response
+
+ngrok authtoken 1qnL966vsg1eZmA6d6g2wvWFsfK_3vBQLgeTwf7psw5ZetskL
